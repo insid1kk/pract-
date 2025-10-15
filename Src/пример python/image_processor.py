@@ -12,7 +12,7 @@ class ImageProcessor:
         try:
             # Создаем папку для результатов, если ее нет
             output_dir = os.path.dirname(output_path)
-            if not os.path.exists(output_dir):
+            if output_dir and not os.path.exists(output_dir):
                 os.makedirs(output_dir)
                 print(f"■ Создана папка: {output_dir}")
 
