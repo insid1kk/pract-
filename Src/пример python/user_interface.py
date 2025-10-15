@@ -9,16 +9,23 @@ class UserInterface:
         input_path = input("Введите путь к изображению: ").strip()
 
         if input_path and os.path.isfile(input_path):
-            # Получаем папку где находится код программы (текущая директория)
-            current_directory = os.getcwd()
+            # Получаем путь к рабочему столу
+            desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
+            
+            # Создаем путь к папке "1" на рабочем столе
+            folder_1 = os.path.join(desktop_path, "1")
+            
+            # Создаем путь к папке "Результаты" внутри папки "1"
+            results_folder = os.path.join(folder_1, "Результаты")
 
-            # Создаем путь к папке "Результаты" в корневой папке с кодом
-            results_folder = os.path.join(current_directory, "Результаты")
-
-            # Проверяем существование папки "Результаты"
+            # Проверяем и создаем папки если их нет
+            if not os.path.exists(folder_1):
+                os.makedirs(folder_1)
+                print(f"■ Создана папка: {folder_1}")
+            
             if not os.path.exists(results_folder):
                 os.makedirs(results_folder)
-                print(f"Создана папка для результатов: {results_folder}")
+                print(f"■ Создана папка: {results_folder}")
 
             # Генерируем имя для выходного файла
             filename = os.path.basename(input_path)
@@ -41,8 +48,7 @@ class UserInterface:
             return
 
         # Конвертируем в черно-белое
-        processor = ImageProcessor()
-        if processor.convert_to_grayscale(input_path, output_path):
+        if ImageProcessor.convert_to_grayscale(input_path, output_path):
             # Предлагаем переместить файл
             self.ask_for_move(output_path)
 
@@ -56,7 +62,10 @@ class UserInterface:
             else:
                 print("✗ Не указана папка для перемещения")
         else:
-            print("☑ Файл сохранен в папке 'Результаты'")
+            # Показываем путь к сохраненному файлу
+            desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
+            results_path = os.path.join(desktop_path, "1", "Результаты")
+            print(f"✅ Файл сохранен в: {results_path}")
 
 def main():
     ui = UserInterface()
